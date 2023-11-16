@@ -1,3 +1,4 @@
+import 'package:fluter_final_to_do/screens/login.dart';
 import 'package:fluter_final_to_do/screens/to-do-list.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData.dark(),
-        home: const ToDoList());
+        home: const LoginPage(),
+    );
   }
 }
