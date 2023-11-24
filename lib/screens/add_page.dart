@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:fluter_final_to_do/model/TaskProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class AddTarea extends StatefulWidget {
   const AddTarea({super.key});
@@ -70,7 +72,19 @@ class _AddTareaState extends State<AddTarea> {
           body: jsonEncode(body),
           headers: {'Content-Type': 'application/json'});
 
+      print(response.body);
+
+      /* Procesamos la respuesta */
       if (response.statusCode == 201) {
+        titleController.text = '';
+        descriptionController.text = '';
+
+        // ignore: use_build_context_synchronously
+        Provider.of<TaskProvider>(context, listen: false).addTask({
+          'title': titulo,
+          'description': descripcion,
+          'is_completed': false,
+        });
         const String mensage = 'Su tarea fue creada!';
         mostrarMensajeExito(mensage);
       } else {
