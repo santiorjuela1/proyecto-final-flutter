@@ -70,6 +70,8 @@ class _AddTareaState extends State<AddTarea> {
           body: jsonEncode(body),
           headers: {'Content-Type': 'application/json'});
 
+      print(response.statusCode);
+
       if (response.statusCode == 201) {
         const String mensage = 'Su tarea fue creada!';
         mostrarMensajeExito(mensage);
