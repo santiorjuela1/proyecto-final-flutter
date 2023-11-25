@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:fluter_final_to_do/model/TaskProvider.dart';
 import 'package:fluter_final_to_do/screens/add_page.dart';
+import 'package:fluter_final_to_do/screens/update_task.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -29,47 +31,64 @@ class ToDoList extends StatelessWidget {
             // Display the list of tasks
             return RefreshIndicator(
               onRefresh: () => taskProvider.getTasks(),
-              child: ListView.builder(
-                itemCount: taskProvider.tasks.length,
-                itemBuilder: (context, index) {
-                  final tarea = taskProvider.tasks[index] as Map;
-                  final id =
-                      tarea.containsKey('_id') ? tarea['_id'] as String? : null;
-                  print('Task ID at index $index: $id');
-                  return ListTile(
-                    leading: CircleAvatar(child: Text('${index + 1}')),
-                    title: Text(tarea['title']),
-                    subtitle: Text(tarea['description']),
-                    trailing: PopupMenuButton(
-                      onSelected: (value) => {
-                        if (value == 'edit')
-                          {
-                            taskProvider.printingTasks(),
-                          }
-                        else if (value == 'delete')
-                          {
-                            if (id != null)
-                              {
-                                print('entre al conditional'),
-                                taskProvider.deleteById(id),
-                              }
-                            else
-                              {
-                                print('entre al condicional, pero soy null'),
-                              }
-                          }
-                      },
-                      itemBuilder: (context) {
-                        return [
-                          const PopupMenuItem(
-                              value: 'edit', child: Text('Edit')),
-                          const PopupMenuItem(
-                              value: 'delete', child: Text('Delete')),
-                        ];
-                      },
-                    ),
-                  );
-                },
+              child: ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(
+                  dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  },
+                ),
+                child: ListView.builder(
+                  itemCount: taskProvider.tasks.length,
+                  itemBuilder: (context, index) {
+                    final tarea = taskProvider.tasks[index] as Map;
+                    final id = tarea.containsKey('_id')
+                        ? tarea['_id'] as String?
+                        : null;
+                    print('Task ID at index $index: $id');
+                    return ListTile(
+                      leading: CircleAvatar(child: Text('${index + 1}')),
+                      title: Text(tarea['title']),
+                      subtitle: Text(tarea['description']),
+                      trailing: PopupMenuButton(
+                        onSelected: (value) => {
+                          if (value == 'edit')
+                            {
+                              if (id != null)
+                                {
+                                  print('entre al conditional'),
+                                  _navigateToUpdatePage(context, id),
+                                }
+                              else
+                                {
+                                  print('entre al condicional, pero soy null'),
+                                }
+                            }
+                          else if (value == 'delete')
+                            {
+                              if (id != null)
+                                {
+                                  print('entre al conditional'),
+                                  taskProvider.deleteById(id),
+                                }
+                              else
+                                {
+                                  print('entre al condicional, pero soy null'),
+                                }
+                            }
+                        },
+                        itemBuilder: (context) {
+                          return [
+                            const PopupMenuItem(
+                                value: 'edit', child: Text('Edit')),
+                            const PopupMenuItem(
+                                value: 'delete', child: Text('Delete')),
+                          ];
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
             );
           }
@@ -86,4 +105,13 @@ class ToDoList extends StatelessWidget {
     final ruta = MaterialPageRoute(builder: (context) => const AddTarea());
     Navigator.push(context, ruta);
   }
+}
+
+void _navigateToUpdatePage(BuildContext context, String taskId) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => UpdateTaskScreen(taskId: taskId),
+    ),
+  );
 }

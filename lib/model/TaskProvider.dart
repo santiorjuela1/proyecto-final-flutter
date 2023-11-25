@@ -4,18 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class TaskProvider extends ChangeNotifier {
+  // Atributos
   List<dynamic> _tasks = [];
 
+
+  // Metodos
   List<dynamic> get tasks => _tasks;
+
+    void addTask(Map<String, dynamic> task) {
+    _tasks.add(task);
+    notifyListeners();
+  }
 
   Future<void> getTasks() async {
     // Your existing code for fetching tasks
-    const url = 'https://api.nstack.in/v1/todos?page=1&limit=10';
+    const url = 'https://api.nstack.in/v1/todos?page=1&limit=20';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     print(response.statusCode);
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       final json = jsonDecode(response.body) as Map;
       print(json);
       final resultado = json['items'] as List;
@@ -25,11 +33,6 @@ class TaskProvider extends ChangeNotifier {
     } else {
       print('Error');
     }
-  }
-
-  void addTask(Map<String, dynamic> task) {
-    _tasks.add(task);
-    notifyListeners();
   }
 
   void deleteById(String? id) async {
@@ -43,7 +46,7 @@ class TaskProvider extends ChangeNotifier {
     final response = await http.delete(uri);
     print(response.statusCode);
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       // Assuming you have a method to find and remove the task from the list
       print('${id} has been deleted');
       _removeTaskById(id);
