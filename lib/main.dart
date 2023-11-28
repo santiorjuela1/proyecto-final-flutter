@@ -1,4 +1,3 @@
-import 'package:fluter_final_to_do/services/TaskProvider.dart';
 import 'package:fluter_final_to_do/screens/to-do-list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,12 +11,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        
     return ChangeNotifierProvider(
       create: (context) => TaskProvider(),
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData.dark(),
-          home: const ToDoList()),
+          home: LoginPage(showRegisterPage: () {  },)),
     );
   }
 }
