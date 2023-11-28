@@ -13,13 +13,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        
     return ChangeNotifierProvider(
       create: (context) => TaskProvider(),
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData.dark(),
-          home: LoginPage(showRegisterPage: () {  },)),
+          home: LoginPage(
+            showRegisterPage: () {},
+          )),
     );
   }
 }
