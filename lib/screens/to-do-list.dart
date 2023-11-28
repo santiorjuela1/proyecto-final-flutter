@@ -31,7 +31,7 @@ class ToDoList extends StatelessWidget {
           } else {
             // Display the list of tasks
             return RefreshIndicator(
-              onRefresh: () => _taskController.getTasks(),
+              onRefresh: () => taskProvider.getTasks(),
               child: ScrollConfiguration(
                 behavior: ScrollConfiguration.of(context).copyWith(
                   dragDevices: {
