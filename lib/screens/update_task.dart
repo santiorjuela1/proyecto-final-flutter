@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fluter_final_to_do/controllers/taskController.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,6 +16,7 @@ class UpdateTaskScreen extends StatefulWidget {
 class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  final TaskController _taskController = TaskController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,38 +50,21 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
   }
 
   Future<void> _updateTask() async {
-    // Implement the logic to update the task using the provided controllers
-    final updatedTitle = titleController.text;
-    final updatedDescription = descriptionController.text;
+    try {
+      await _taskController.updateTask(
+        widget.taskId,
+        titleController.text,
+        descriptionController.text,
+      );
 
-    final body = {
-      'title': updatedTitle,
-      'description': updatedDescription,
-      'is_completed': false,
-    };
-
-    final url =
-        'https://api.nstack.in/v1/todos/${widget.taskId}'; // Use widget.taskId here
-    final uri = Uri.parse(url);
-
-    // Implement the API call or database update logic here
-    final response = await http.put(uri,
-        body: jsonEncode(body), headers: {'Content-Type': 'application/json'});
-
-    print(response.body);
-
-    if (response.statusCode == 200) {
       titleController.text = '';
       descriptionController.text = '';
 
-      final jsonResponse = jsonDecode(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to update task.');
+      // After updating, you might want to navigate back to the main task list screen
+      Navigator.pop(context);
+    } catch (e) {
+      print('Error: $e');
+      // Handle error, show a snackbar, etc.
     }
-
-    // After updating, you might want to navigate back to the main task list screen
-    Navigator.pop(context);
   }
 }

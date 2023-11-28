@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:ui';
 
-import 'package:fluter_final_to_do/model/TaskProvider.dart';
+import 'package:fluter_final_to_do/controllers/taskController.dart';
+import 'package:fluter_final_to_do/services/TaskProvider.dart';
 import 'package:fluter_final_to_do/screens/add_page.dart';
 import 'package:fluter_final_to_do/screens/update_task.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class ToDoList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TaskController _taskController = TaskController();
     return Scaffold(
       appBar: AppBar(
         title: const Text('To Do List'),
@@ -20,7 +22,6 @@ class ToDoList extends StatelessWidget {
       body: Consumer<TaskProvider>(
         builder: (context, taskProvider, child) {
           if (taskProvider.tasks.isEmpty) {
-            // Display a message when there are no tasks
             return const Center(
               child: Text(
                 'No hay ninguna tarea',
@@ -30,7 +31,7 @@ class ToDoList extends StatelessWidget {
           } else {
             // Display the list of tasks
             return RefreshIndicator(
-              onRefresh: () => taskProvider.getTasks(),
+              onRefresh: () => _taskController.getTasks(),
               child: ScrollConfiguration(
                 behavior: ScrollConfiguration.of(context).copyWith(
                   dragDevices: {
@@ -56,12 +57,14 @@ class ToDoList extends StatelessWidget {
                             {
                               if (id != null)
                                 {
-                                  print('entre al conditional'),
+                                  print(
+                                      'entre al conditional para hacer update'),
                                   _navigateToUpdatePage(context, id),
                                 }
                               else
                                 {
-                                  print('entre al condicional, pero soy null'),
+                                  print(
+                                      'entre al condicional para hacer update, pero soy null'),
                                 }
                             }
                           else if (value == 'delete')
@@ -69,7 +72,7 @@ class ToDoList extends StatelessWidget {
                               if (id != null)
                                 {
                                   print('entre al conditional'),
-                                  taskProvider.deleteById(id),
+                                  _taskController.deleteById(id),
                                 }
                               else
                                 {
