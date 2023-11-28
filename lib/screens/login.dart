@@ -1,3 +1,4 @@
+import 'package:fluter_final_to_do/screens/to-do-list.dart';
 import 'package:fluter_final_to_do/screens/user.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  Future<void> signIn() async {
+  Future<void> signIn(BuildContext context) async {
     // Obtener datos del formulario
     String correo = _emailController.text;
     String contrasena = _passwordController.text;
@@ -31,8 +32,12 @@ class _LoginPageState extends State<LoginPage> {
 
     // Verificar las credenciales
     if (usuarioExistente.verificarCredenciales(correo, contrasena)) {
-      // Las credenciales son correctas, puedes navegar a la página de inicio aquí
+      // Las credenciales son correctas, navegar a la página de inicio
       print("Inicio de sesión exitoso");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const ToDoList()),
+      );
     } else {
       // Las credenciales son incorrectas
       print("Inicio de sesión fallido");
@@ -48,11 +53,11 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
+              const Icon(
                 Icons.android,
                 size: 100,
               ),
-              SizedBox(height: 75),
+              const SizedBox(height: 75),
               // Bienvenida!
               Text(
                 "Bienvenido de nuevo!",
@@ -111,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: GestureDetector(
-                  onTap: signIn,
+                  onTap: () => signIn(context),
                   child: Container(
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
