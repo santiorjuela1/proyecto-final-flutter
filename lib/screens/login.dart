@@ -1,5 +1,6 @@
+import 'package:fluter_final_to_do/screens/register_page.dart';
 import 'package:fluter_final_to_do/screens/to-do-list.dart';
-import 'package:fluter_final_to_do/screens/user.dart';
+import 'package:fluter_final_to_do/model/user.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -13,35 +14,13 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isLoaded = false;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
-  }
-
-  Future<void> signIn(BuildContext context) async {
-    // Obtener datos del formulario
-    String correo = _emailController.text;
-    String contrasena = _passwordController.text;
-
-    // Crear un objeto Usuario con los datos del formulario
-    Usuario usuarioExistente = Usuario(
-        correoElectronico: "correo@example.com", contrasena: "contraseña123");
-
-    // Verificar las credenciales
-    if (usuarioExistente.verificarCredenciales(correo, contrasena)) {
-      // Las credenciales son correctas, navegar a la página de inicio
-      print("Inicio de sesión exitoso");
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const ToDoList()),
-      );
-    } else {
-      // Las credenciales son incorrectas
-      print("Inicio de sesión fallido");
-    }
   }
 
   @override
@@ -59,14 +38,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 75),
               // Bienvenida!
-              Text(
+              const Text(
                 "Bienvenido de nuevo!",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 36,
                 ),
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               // Correo
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -80,15 +59,17 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.only(left: 20.0),
                     child: TextField(
                       controller: _emailController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: "Correo Electronico",
+                        hintStyle: TextStyle(color: Colors.purple),
                       ),
+                      style: const TextStyle(color: Colors.black),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               // Contraseña
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -103,63 +84,72 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextField(
                       controller: _passwordController,
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: "Contraseña",
+                        hintStyle: TextStyle(color: Colors.purple),
                       ),
+                      style: const TextStyle(color: Colors.black),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               // Botón de inicio de sesión
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: GestureDetector(
-                  onTap: () => signIn(context),
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple,
+                child: ElevatedButton(
+                  onPressed: () => signIn(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple,
+                    padding: const EdgeInsets.all(20),
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Center(
-                      child: Text(
-                        "Inicio sesión",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      "Inicio sesión",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
                       ),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 25),
+              const SizedBox(height: 25),
               // Nuevo usuario
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Eres nuevo?",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      // Navegar a la página de registro
-                      widget.showRegisterPage();
-                    },
-                    child: Text(
-                      " Regístrate ahora",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+                  const SizedBox(height: 10), // Adjust the spacing
+                  ElevatedButton(
+                    onPressed: () => _navigateToRegisterPage(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple, // Set the button color
+                      foregroundColor: Colors.white, // Set the text color
+                      padding: const EdgeInsets.all(20),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                  )
+                    child: const Text(
+                      "Regístrate ahora",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
                 ],
               )
             ],
@@ -167,5 +157,56 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<void> signIn(BuildContext context) async {
+    // Obtener datos del formulario
+    String correoPorLogin = _emailController.text;
+    String contrasenaPorLogin = _passwordController.text;
+
+    // Obtener el usuario registrado
+    Usuario usuarioRegistrado = Usuario.instance;
+
+    // Verificar las credenciales
+    if (usuarioRegistrado.verificarCredenciales(
+        correoPorLogin, contrasenaPorLogin)) {
+      // Las credenciales son correctas, navegar a la página de inicio
+      mostrarMensajeExito("Inicio de sesión exitoso");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const ToDoList()),
+      );
+    } else {
+      // Las credenciales son incorrectas
+      mostrarMensajeFracaso("Inicio de sesión fallido");
+    }
+  }
+
+  void mostrarMensajeFracaso(String message) {
+    final snackBar = SnackBar(
+      content: Text(message,
+          style: const TextStyle(color: Colors.white),
+          textAlign: TextAlign.center),
+      backgroundColor: Colors.red,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void mostrarMensajeExito(String message) {
+    final snackBar = SnackBar(
+      content: Text(message,
+          style: const TextStyle(color: Colors.white),
+          textAlign: TextAlign.center),
+      backgroundColor: Colors.green,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _navigateToRegisterPage(BuildContext context) {
+    final ruta = MaterialPageRoute(
+        builder: (context) => RegisterPage(
+              showLoginPage: () {},
+            ));
+    Navigator.push(context, ruta);
   }
 }
