@@ -1,10 +1,9 @@
 import 'dart:ffi';
 
-import 'package:fluter_final_to_do/screens/login.dart';
-import 'package:fluter_final_to_do/screens/to-do-list.dart';
 import 'package:flutter/material.dart';
-import 'package:fluter_final_to_do/model/user.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_final_to_do/model/user.dart';
+import 'package:flutter_final_to_do/screens/login.dart';
 
 class RegisterPage extends StatefulWidget {
   final VoidCallback showLoginPage;

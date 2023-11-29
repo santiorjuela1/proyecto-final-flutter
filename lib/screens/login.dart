@@ -1,7 +1,7 @@
-import 'package:fluter_final_to_do/screens/register_page.dart';
-import 'package:fluter_final_to_do/screens/to-do-list.dart';
-import 'package:fluter_final_to_do/model/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_final_to_do/model/user.dart';
+import 'package:flutter_final_to_do/screens/register_page.dart';
+import 'package:flutter_final_to_do/screens/to-do-list.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
@@ -14,7 +14,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isLoaded = false;
 
   @override
   void dispose() {

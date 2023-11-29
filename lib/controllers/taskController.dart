@@ -1,5 +1,5 @@
 // tarea_controller.dart
-import 'package:fluter_final_to_do/services/TaskProvider.dart';
+import 'package:flutter_final_to_do/services/TaskProvider.dart';
 
 class TaskController {
   final TaskProvider _taskProvider = TaskProvider();

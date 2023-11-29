@@ -1,13 +1,10 @@
-import 'dart:convert';
-import 'dart:ui';
-
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_final_to_do/controllers/taskController.dart';
 import 'package:flutter_final_to_do/screens/add_page.dart';
 import 'package:flutter_final_to_do/screens/update_task.dart';
 import 'package:flutter_final_to_do/services/TaskProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:http/http.dart' as http;
 
 class ToDoList extends StatelessWidget {
@@ -19,20 +16,6 @@ class ToDoList extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('To Do List'),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            ListTile(
-              title: const Text('Cambiar Modo'),
-              onTap: () {
-                // Aquí puedes cambiar entre el tema claro y oscuro
-                _toggleTheme(context);
-                Navigator.pop(context); // Cierra el Drawer
-              },
-            ),
-          ],
-        ),
       ),
       body: Consumer<TaskProvider>(
         builder: (context, taskProvider, child) {
@@ -133,12 +116,12 @@ class ToDoList extends StatelessWidget {
     );
   }
 
-  void _toggleTheme(BuildContext context) {
-    final Brightness newBrightness =
-        Theme.of(context).brightness == Brightness.light
-            ? Brightness.dark
-            : Brightness.light;
+  // void _toggleTheme(BuildContext context) {
+  //   final Brightness newBrightness =
+  //       Theme.of(context).brightness == Brightness.light
+  //           ? Brightness.dark
+  //           : Brightness.light;
 
-    EasyDynamicTheme.of(context).setBrightness(newBrightness);
-  }
+  //   //  EasyDynamicTheme.of(context).setBrightness(newBrightness);
+  // }
 }

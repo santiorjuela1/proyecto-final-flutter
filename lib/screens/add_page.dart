@@ -1,6 +1,6 @@
-import 'package:fluter_final_to_do/controllers/taskController.dart';
-import 'package:fluter_final_to_do/services/TaskProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_final_to_do/controllers/taskController.dart';
+import 'package:flutter_final_to_do/services/TaskProvider.dart';
 import 'package:provider/provider.dart';
 
 class AddTarea extends StatefulWidget {
@@ -50,6 +50,7 @@ class _AddTareaState extends State<AddTarea> {
   }
 
   Future<void> saveTask() async {
+    print("i got into saveTask ");
     if (titleController.text.isNotEmpty &&
         descriptionController.text.isNotEmpty) {
       try {
@@ -62,6 +63,7 @@ class _AddTareaState extends State<AddTarea> {
         print('Status code: $statusCode');
 
         if (statusCode == 201) {
+          // ignore: use_build_context_synchronously
           Provider.of<TaskProvider>(context, listen: false).getTasks();
           titleController.text = '';
           descriptionController.text = '';
