@@ -5,14 +5,13 @@ import 'package:flutter_final_to_do/screens/add_page.dart';
 import 'package:flutter_final_to_do/screens/update_task.dart';
 import 'package:flutter_final_to_do/services/TaskProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 class ToDoList extends StatelessWidget {
-  const ToDoList({Key? key});
+  const ToDoList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final TaskController _taskController = TaskController();
+    final TaskController taskController = TaskController();
     return Scaffold(
       appBar: AppBar(
         title: const Text('To Do List'),
@@ -70,7 +69,7 @@ class ToDoList extends StatelessWidget {
                               if (id != null)
                                 {
                                   print('entre al conditional'),
-                                  _taskController.deleteById(id),
+                                  taskController.deleteById(id),
                                 }
                               else
                                 {

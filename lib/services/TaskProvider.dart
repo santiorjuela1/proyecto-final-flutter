@@ -11,7 +11,7 @@ class TaskProvider extends ChangeNotifier {
 
   // CREATE TASK
   Future<int> createTask(Map<String, dynamic> task) async {
-    final url = 'https://api.nstack.in/v1/todos';
+    const url = 'https://api.nstack.in/v1/todos';
     final uri = Uri.parse(url);
 
     final body = {
@@ -102,7 +102,7 @@ class TaskProvider extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       // Assuming you have a method to find and remove the task from the list
-      print('${id} has been deleted');
+      print('$id has been deleted');
       _removeTaskById(id);
     } else {
       print('Error deleting task: ${response.statusCode}');
